@@ -102,8 +102,8 @@ namespace Samuel.Tools
             tanBCFdot = (bCompsition) * _tanHalfVerticalFov * aspect;
             FCFdot = Mathf.Atan((float)tanFCFdot) * Mathf.Rad2Deg;
             BCFdot = Mathf.Atan((float)tanBCFdot) * Mathf.Rad2Deg;
-            FFdot = CFDis * Mathf.Sin((float)FCFdot * Mathf.Deg2Rad);
-            CFdot = CFDis * Mathf.Cos((float)FCFdot * Mathf.Deg2Rad);
+            FFdot = CF * Mathf.Sin((float)FCFdot * Mathf.Deg2Rad);
+            CFdot = CF * Mathf.Cos((float)FCFdot * Mathf.Deg2Rad);
 
             //BBdot = FFdot / fCompositionX * bCompositionX
             //余弦定理求解BC边，直接用求根公式求解

@@ -5,16 +5,16 @@ m_ProjectFiles:
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637890061208085549
-    m_Hash: 2884875791
+      ticks: 637890087024052519
+    m_Hash: 3735323531
   m_LockFileStatus:
     m_FilePath: D:/GitHub/CameraForDialogue_V1.0/Packages/packages-lock.json
     m_PathExists: 1
     m_ContentTrackingEnabled: 1
     m_ModificationDate:
       serializedVersion: 2
-      ticks: 637890061355689132
-    m_Hash: 3913769918
+      ticks: 637890087024052519
+    m_Hash: 3747900742
 m_EmbeddedPackageManifests:
   m_ManifestsStatus: {}
 m_PackageAssets:
