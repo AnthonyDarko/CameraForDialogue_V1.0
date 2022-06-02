@@ -77,14 +77,19 @@ namespace Pangu.Tools
         private double _sinC;//偏航角的sin值
         private double _cosC;//偏航角的cos值
         private double _tanHalfHorizonFov;//横向fov的一半的tan值
+        private double _tanHalfVerticalFov;
         private Vector3 cameraRight;
         private Vector3 camUp;
         private Vector3 camFwd;
+        public double CF;
         public double CFDis;
 
         private double fl;
         private double blPfb;
         private double fb;
+
+        private double tanFCFdot;
+        private double tanBCFdot;
 
         private void Update()
         {
@@ -250,14 +255,36 @@ namespace Pangu.Tools
                     break;
                 case CamClass.Type_2:
                     {
+                        //根据CF值重新计算Yaw值
+                        CFDis = (_camera.transform.position - wfPosition).magnitude;
+
                         #region Constant
-                        var cAngle = Mathf.Abs(yaw);
+                        float cAngle;
+                        _aspect = _camera.aspect;
+                        _tanHalfVerticalFov = Mathf.Tan(Mathf.Deg2Rad * fov / 2);
+                        _tanHalfHorizonFov = _tanHalfVerticalFov * _aspect;
+                        #endregion
+
+                        //利用fov和aspect求出tanFCF'的值，再得出FCF'的度数
+                        tanFCFdot = (fCompX) * _tanHalfVerticalFov * _aspect;
+                        tanBCFdot = (bCompX) * _tanHalfVerticalFov * _aspect;
+
+                        //这里先由相机与近平面的距离和tanFCA（即tanFCFdot）可以拿到近平面上的Wf在相机水平面上的投影与相机的连线
+                        //而这里tanWfCF的值可以由fCompY得到，再通过近平面上的Wf在相机水平面上的投影与相机的连线的距离可以拿到在该平面上实际的高度，再由此可以算出Wf在近平面上投影与相机的连线长度
+                        //由于该条线与相机和Wf的连线是共线的，所以两者相比可以拿到比值，利用这个比值和近平面上的Wf在相机水平面上的投影与相机的连线的长度可以算出CF的值
+                        //同时，利用bCompY和CF还可以算出BWb与FWf之间的差值，利用这个差值就可以拿到BF的长度，后面的步骤就与水平面上的计算相同
+
+
+
+
+
+
+                        cAngle = Mathf.Abs(yaw);
                         _sinC = Mathf.Sin(Mathf.Deg2Rad * cAngle);
                         _cosC = Mathf.Cos(Mathf.Deg2Rad * cAngle);
-                        _aspect = _camera.aspect;
-                        var tanHalfVerticalFov = Mathf.Tan(Mathf.Deg2Rad * fov / 2);
-                        _tanHalfHorizonFov = tanHalfVerticalFov * _aspect;
-                        #endregion
+
+
+
 
                         #region Solve
                         //c-相机，wb-背景目标，wf-前景目标，l相机中心线和fb的交点

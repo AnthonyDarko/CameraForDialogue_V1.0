@@ -649,8 +649,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044605313}
-  m_LocalRotation: {x: -0.02366897, y: 0.96271986, z: -0.08967423, w: -0.2541041}
-  m_LocalPosition: {x: 5.459506, y: 3.1709661, z: 11.84606}
+  m_LocalRotation: {x: -0.0071911737, y: 0.9793777, z: -0.035431035, w: -0.19877705}
+  m_LocalPosition: {x: 2.8385954, y: 1.2177498, z: 9.249409}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -677,18 +677,19 @@ MonoBehaviour:
     target: {fileID: 771008734}
     compositionX: 0.23
     compositionY: -0.1
-  yaw: -30
+  yaw: -23
   fov: 30
   dutch: 0
-  CamType: 0
-  x_Test: -0.09114635
-  y_Test: 0.9827966
-  z_Test: -0.16063355
-  x_Right: -0.0911464
-  y_Right: 0.9827966
-  z_Right: -0.16063364
-  Var1: 4.935071
+  CamType: 1
+  x_Test: -0.028171502
+  y_Test: 0.99738586
+  z_Test: -0.06654185
+  x_Right: -0.02817116
+  y_Right: 0.9973858
+  z_Right: -0.06654108
+  Var1: 4.9889183
   Var2: 5
   Var3: 0
-  Var4: 0.80316746
-  CFDis: 0
+  Var4: 0.33270958
+  CF: 0
+  CFDis: 5.253381252288818
