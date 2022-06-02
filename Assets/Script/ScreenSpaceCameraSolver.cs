@@ -270,21 +270,15 @@ namespace Pangu.Tools
                         tanBCFdot = (bCompX) * _tanHalfVerticalFov * _aspect;
 
                         //这里先由相机与近平面的距离和tanFCA（即tanFCFdot）可以拿到近平面上的Wf在相机水平面上的投影与相机的连线
-                        //而这里tanWfCF的值可以由fCompY得到，再通过近平面上的Wf在相机水平面上的投影与相机的连线的距离可以拿到在该平面上实际的高度，再由此可以算出Wf在近平面上投影与相机的连线长度
+                        //而这里tanWfCF的值可以由fCompY和相机到近平面的距离得到，再通过近平面上的Wf在相机水平面上的投影与相机的连线的距离可以拿到在该平面上实际的纵坐标，再由此可以算出Wf在近平面上投影与相机的连线长度
                         //由于该条线与相机和Wf的连线是共线的，所以两者相比可以拿到比值，利用这个比值和近平面上的Wf在相机水平面上的投影与相机的连线的长度可以算出CF的值
-                        //同时，利用bCompY和CF还可以算出BWb与FWf之间的差值，利用这个差值就可以拿到BF的长度，后面的步骤就与水平面上的计算相同
-
-
-
+                        //这一步有问题，重新再考虑，BWb的长度应该由CWb和bCompY与tanHalfVerticalFov来计算，同时，利用bCompY和CF还可以算出BWb与FWf之间的差值，利用这个差值就可以拿到BF的长度，后面的步骤就与水平面上的计算相同
 
 
 
                         cAngle = Mathf.Abs(yaw);
                         _sinC = Mathf.Sin(Mathf.Deg2Rad * cAngle);
                         _cosC = Mathf.Cos(Mathf.Deg2Rad * cAngle);
-
-
-
 
                         #region Solve
                         //c-相机，wb-背景目标，wf-前景目标，l相机中心线和fb的交点
