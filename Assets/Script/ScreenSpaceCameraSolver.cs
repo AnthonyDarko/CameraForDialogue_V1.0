@@ -310,7 +310,14 @@ namespace Pangu.Tools
                         float FBa = AF + ABa;
                         float WbaWf = Mathf.Sqrt((FWf - BaWba) * (FWf - BaWba) + FBa * FBa);
 
-                        //计算WbaCWf角
+                        //余弦定理计算WbaCWf角
+                        float CosWbaCWf = (CWba * CWba + CWf * CWf - WbaWf * WbaWf) / (2 * CWba * CWf);
+                        float AngleWbaCWf = Mathf.Acos(CosWbaCWf);
+
+                        //余弦定理求解CWb长度
+
+
+
 
 
 
