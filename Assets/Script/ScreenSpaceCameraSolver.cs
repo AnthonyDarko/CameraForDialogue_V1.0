@@ -47,18 +47,18 @@ namespace Pangu.Tools
 
         public CamClass CamType;
 
-        [SerializeField] private float x_Test;// = _camera.transform.up.y;
-        [SerializeField] private float y_Test;
-        [SerializeField] private float z_Test;
+        private float x_Test;// = _camera.transform.up.y;
+        private float y_Test;
+        private float z_Test;
 
         [SerializeField] private float x_Right;// = _camera.transform.up.y;
         [SerializeField] private float y_Right;
         [SerializeField] private float z_Right;
 
-        [SerializeField] private float Var1;// = _camera.transform.up.y;
-        [SerializeField] private float Var2;
-        [SerializeField] private float Var3;
-        [SerializeField] private float Var4;
+        private float Var1;// = _camera.transform.up.y;
+        private float Var2;
+        private float Var3;
+        private float Var4;
 
         public double bCompX => back.compositionX;
         public double bCompY => back.compositionY;
@@ -81,15 +81,19 @@ namespace Pangu.Tools
         private Vector3 cameraRight;
         private Vector3 camUp;
         private Vector3 camFwd;
-        public double CF;
-        public double CFDis;
-
+        
         private double fl;
         private double blPfb;
         private double fb;
 
-        private double tanFCFdot;
-        private double tanBCFdot;
+        public float CWf;
+        public float CWfDis;
+        private double tanFCA;
+        private double tanBCA;
+        private float FCA;
+        private float BCA;
+
+        public float temp;
 
         private void Update()
         {
@@ -140,7 +144,7 @@ namespace Pangu.Tools
                         var clPfb2 = clPfb * clPfb; // CL / FB 的平方
                         
                         //CL的值求解
-                        var x = _sinC / fCompX / _aspect * 2; // AE / FL //tan(FLD)   //_sinC / fCompX * 2 / _aspect; // (这里的常量2可以考虑去掉，常量2不能去掉，这是为什么？) 可以约为 [ sinC / (fCompX / 2 * aspect) ] => 2 * tan(DLF)，设中轴线交点为A，下边界交点为D，最后可以得到 2 * FD / FL
+                        var x = _sinC / fCompX / _aspect * 2; //这里的常量2与横坐标的范围相关，这里的X为0到1，只控制了一半的屏幕的值 // AE / FL //tan(FLD)   //_sinC / fCompX * 2 / _aspect; // (这里的常量2可以考虑去掉，常量2不能去掉，这是为什么？) 可以约为 [ sinC / (fCompX / 2 * aspect) ] => 2 * tan(DLF)，设中轴线交点为A，下边界交点为D，最后可以得到 2 * FD / FL
                         var clPdh2 = clPfl * clPfl / (abs(fCompY - bCompY / _overSacle) * x * abs(fCompY - bCompY / _overSacle) * x); // 这里的对应关系错了，需要重新解算 // bCompY * _overSacle，这是拿到bCompY在fCompY平面上投影的高度，dh的意思是fCompY与bCompY在F的投影面上的高度差
                         var clPwfwb2 = clPfb2 * clPdh2 / (clPfb2 + clPdh2);
                         var wfwb = Vector3.Distance(wbPosition, wfPosition);
@@ -257,7 +261,7 @@ namespace Pangu.Tools
                 case CamClass.Type_2:
                     {
                         //根据CF值重新计算Yaw值
-                        CFDis = (_camera.transform.position - wfPosition).magnitude;
+                        CWfDis = (_camera.transform.position - wfPosition).magnitude;
 
                         #region Constant
                         float cAngle;
@@ -266,15 +270,50 @@ namespace Pangu.Tools
                         _tanHalfHorizonFov = _tanHalfVerticalFov * _aspect;
                         #endregion
 
-                        //利用fov和aspect求出tanFCF'的值，再得出FCF'的度数
-                        tanFCFdot = (fCompX) * _tanHalfVerticalFov * _aspect;
-                        tanBCFdot = (bCompX) * _tanHalfVerticalFov * _aspect;
+                        //利用fov和aspect求出tanFCA的值，再得出FCA的度数
+                        tanFCA = (fCompX) * _tanHalfVerticalFov * _aspect;
+                        tanBCA = (bCompX) * _tanHalfVerticalFov * _aspect;
 
-                        //这里先由相机与近平面的距离和tanFCA（即tanFCFdot）可以拿到近平面上的Wf在相机水平面上的投影与相机的连线
+                        FCA = Mathf.Atan((float)tanFCA) * Mathf.Rad2Deg;
+                        BCA = Mathf.Atan((float)tanBCA) * Mathf.Rad2Deg;
+
+                        //这里先由相机与近平面的距离和tanFCA（即tanFCFdot，改为A）可以拿到近平面上的Wf在相机水平面上的投影与相机的连线
                         //而这里tanWfCF的值可以由fCompY和相机到近平面的距离得到，再通过近平面上的Wf在相机水平面上的投影与相机的连线的距离可以拿到在该平面上实际的纵坐标，再由此可以算出Wf在近平面上投影与相机的连线长度
                         //由于该条线与相机和Wf的连线是共线的，所以两者相比可以拿到比值，利用这个比值和近平面上的Wf在相机水平面上的投影与相机的连线的长度可以算出CF的值
                         //这一步有问题，重新再考虑，BWb的长度应该由CWb和bCompY与tanHalfVerticalFov来计算，同时，利用bCompY和CF还可以算出BWb与FWf之间的差值，利用这个差值就可以拿到BF的长度，后面的步骤就与水平面上的计算相同
-                        //这个也有问题，考虑讲WbWf投影到AFWf平面上，此时将投影后的WbWf延BWb移动，此时得到的裁剪后FWf上的线段与投影前的线段是一致的，
+                        //这个也有问题，考虑讲WbWf投影到AFWf平面上，此时将投影后的WbWf延BWb移动，此时得到的裁剪后FWf上的线段与投影前的线段是一致的
+                        //设Wb投影变换到到AFWf平面上之后的点为Wbdot，该点的横纵坐标的具体值可以由BCompX和AF、BCompY与FWf拿到，由此可以计算得到WfWbdot的长度
+                        //再由Wbdot的纵坐标和B点在该平面上的投影点与相机的连线拿到CWbdot的长度，至此，拿到CWbdot，CWf，WfWbdot三边的长度
+                        //根据余弦定理，拿到∠WbdotCWf的值，该角也是三角形WfCWb的∠WfCWb，再由余弦定理，结合WbWf，CWf，∠WfCWb求出CWb的长度
+                        //至此，根据三角形相似，由CWbdot与CWb的比值，可以拿到BWb的值，再由三角形相似的传递，拿到CA与CBdot（Bdot为B点在相机竖直平面上做垂线的结果）的比值
+                        //至此，BBdot的实际值与ABdot的实际值全部计算完成，将（AF + BBdot） / ABdot 拿到 tan(Yaw) 的值，至此 Yaw 值计算完成
+
+                        //由近平面转移至WfFA平面上进行计算
+                        float zNear;
+                        temp = _camera.nearClipPlane;
+                        zNear = _camera.nearClipPlane;
+
+                        float CFdot = zNear / Mathf.Cos(FCA);
+                        float nearFWfdot = zNear * (float)_tanHalfVerticalFov * (float)fCompY;
+                        float CWfdot = Mathf.Sqrt(CFdot * CFdot + nearFWfdot * nearFWfdot);
+                        float CWfdotScaleCWf = CWfdot / CWf;
+                        float CF = CFdot / CWfdotScaleCWf;
+                        float CA = zNear / CWfdotScaleCWf;
+                        float AF = CA * (float)tanFCA;
+                        float FWf = CA * (float)_tanHalfVerticalFov * (float)fCompY; // nearFWfdot / CWfdotScaleCWf;
+
+                        float ABa = CA * (float)tanBCA;
+                        float BaWba = CA * (float)_tanHalfVerticalFov * (float)bCompY;
+                        float CBa = CA / Mathf.Cos(BCA);
+                        float CWba = Mathf.Sqrt(CBa * CBa + BaWba * BaWba);
+
+                        float FBa = AF + ABa;
+                        float WbaWf = Mathf.Sqrt((FWf - BaWba) * (FWf - BaWba) + FBa * FBa);
+
+                        //计算WbaCWf角
+
+
+
 
 
                         cAngle = Mathf.Abs(yaw);
@@ -295,7 +334,7 @@ namespace Pangu.Tools
                         var clPfb2 = clPfb * clPfb; // CL / FB 的平方
 
                         //CL的值求解
-                        var x = _sinC / fCompX / _aspect * 2; // AE / FL //tan(FLD)   //_sinC / fCompX * 2 / _aspect; // (这里的常量2可以考虑去掉，常量2不能去掉，这是为什么？) 可以约为 [ sinC / (fCompX / 2 * aspect) ] => 2 * tan(DLF)，设中轴线交点为A，下边界交点为D，最后可以得到 2 * FD / FL
+                        var x = _sinC / fCompX / _aspect * 2;//这里的常量2与横坐标的范围相关，这里的X为0到1，只控制了一半的屏幕的值 // AE / FL //tan(FLD)   //_sinC / fCompX * 2 / _aspect; // (这里的常量2可以考虑去掉，常量2不能去掉，这是为什么？) 可以约为 [ sinC / (fCompX / 2 * aspect) ] => 2 * tan(DLF)，设中轴线交点为A，下边界交点为D，最后可以得到 2 * FD / FL
                         var clPdh2 = clPfl * clPfl / (abs(fCompY - bCompY / _overSacle) * x * abs(fCompY - bCompY / _overSacle) * x); // 这里的对应关系错了，需要重新解算 // bCompY * _overSacle，这是拿到bCompY在fCompY平面上投影的高度，dh的意思是fCompY与bCompY在F的投影面上的高度差
                         var clPwfwb2 = clPfb2 * clPdh2 / (clPfb2 + clPdh2);
                         var wfwb = Vector3.Distance(wbPosition, wfPosition);
@@ -402,8 +441,6 @@ namespace Pangu.Tools
                     }
                     break;
             }
-
-            
         }
 
         private bool Valid()
