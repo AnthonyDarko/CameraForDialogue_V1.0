@@ -429,6 +429,7 @@ namespace Pangu.Tools
                         var VecBdotK = (-1.0f) * (VecWBBdot) + VecWBK;
                         var LBdotN = Mathf.Acos((float)(BdotL / sqrt(BdotN2))) * Mathf.Rad2Deg;
                         var VecBdotN = VecWBN - VecWBBdot;
+
                         //判断VecBdotN与VecLBdot（即camFwd）的位置关系
                         {
                             if (fY < bY)
