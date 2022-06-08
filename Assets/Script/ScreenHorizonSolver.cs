@@ -109,6 +109,7 @@ namespace Samuel.Tools
             //余弦定理求解BC边，直接用求根公式求解
             float BCF = (float)(FCFdot + BCFdot);
             float CosBCF = Mathf.Cos(Mathf.Atan((float)tanFCFdot) + Mathf.Atan((float)tanBCFdot));
+            _fbDistance = Vector3.Distance(_bPos, _fPos);
 
             float b = -2.0f * CF * CosBCF;
             float a = 1f;
@@ -124,7 +125,6 @@ namespace Samuel.Tools
             yaw = YawCal;
 
             _cAngle = Mathf.Abs(yaw);
-            _fbDistance = Vector3.Distance(_bPos, _fPos);
             _sinC = Mathf.Sin(Mathf.PI / 180 * _cAngle);
             _cosC = Mathf.Cos(Mathf.PI / 180 * _cAngle);
             _tanHalfVerticalFov = Mathf.Tan(Mathf.PI / 180 * fov / 2);

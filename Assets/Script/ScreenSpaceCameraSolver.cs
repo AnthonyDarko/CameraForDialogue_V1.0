@@ -93,7 +93,9 @@ namespace Pangu.Tools
         private float FCA;
         private float BCA;
 
+        [SerializeField] private float YawCal;
         public float temp;
+        public float actualValue;
 
         private void Update()
         {
@@ -287,24 +289,25 @@ namespace Pangu.Tools
                         //根据余弦定理，拿到∠WbdotCWf的值，该角也是三角形WfCWb的∠WfCWb，再由余弦定理，结合WbWf，CWf，∠WfCWb求出CWb的长度
                         //至此，根据三角形相似，由CWbdot与CWb的比值，可以拿到BWb的值，再由三角形相似的传递，拿到CA与CBdot（Bdot为B点在相机竖直平面上做垂线的结果）的比值
                         //至此，BBdot的实际值与ABdot的实际值全部计算完成，将（AF + BBdot） / ABdot 拿到 tan(Yaw) 的值，至此 Yaw 值计算完成
+                        //这里有一个基本的观察，即在该条件下，三角锥AFWfC是一个固定的几何体
 
                         //由近平面转移至WfFA平面上进行计算
                         float zNear;
-                        temp = _camera.nearClipPlane;
                         zNear = _camera.nearClipPlane;
 
-                        float CFdot = zNear / Mathf.Cos(FCA);
-                        float nearFWfdot = zNear * (float)_tanHalfVerticalFov * (float)fCompY;
+                        float FdotAdot = zNear * (float)_tanHalfHorizonFov * (float)fCompX;
+                        float CFdot = Mathf.Sqrt(FdotAdot * FdotAdot + zNear * zNear);// Mathf.Abs(zNear / Mathf.Cos(FCA));
+                        float nearFWfdot = Mathf.Abs(zNear * (float)_tanHalfVerticalFov * (float)fCompY * 2);
                         float CWfdot = Mathf.Sqrt(CFdot * CFdot + nearFWfdot * nearFWfdot);
-                        float CWfdotScaleCWf = CWfdot / CWf;
-                        float CF = CFdot / CWfdotScaleCWf;
-                        float CA = zNear / CWfdotScaleCWf;
+                        float CWfdotScaleCWf = Mathf.Abs(CWfdot / CWf); 
+                        float CF = Mathf.Abs(CFdot / CWfdotScaleCWf);
+                        float CA = Mathf.Abs(zNear / CWfdotScaleCWf);
                         float AF = CA * (float)tanFCA;
-                        float FWf = CA * (float)_tanHalfVerticalFov * (float)fCompY; // nearFWfdot / CWfdotScaleCWf;
+                        float FWf = nearFWfdot / CWfdotScaleCWf; //  CA * (float)_tanHalfVerticalFov * (float)fCompY; //
 
-                        float ABa = CA * (float)tanBCA;
-                        float BaWba = CA * (float)_tanHalfVerticalFov * (float)bCompY;
-                        float CBa = CA / Mathf.Cos(BCA);
+                        float ABa = Mathf.Abs(CA * (float)_tanHalfHorizonFov * (float)bCompX); //Mathf.Abs(CA * (float)tanBCA);
+                        float BaWba = Mathf.Abs(CA * (float)_tanHalfVerticalFov * (float)bCompY * 2);
+                        float CBa = Mathf.Sqrt(CA * CA + ABa * ABa);// CA / Mathf.Cos(BCA);
                         float CWba = Mathf.Sqrt(CBa * CBa + BaWba * BaWba);
 
                         float FBa = AF + ABa;
@@ -312,17 +315,33 @@ namespace Pangu.Tools
 
                         //余弦定理计算WbaCWf角
                         float CosWbaCWf = (CWba * CWba + CWf * CWf - WbaWf * WbaWf) / (2 * CWba * CWf);
-                        float AngleWbaCWf = Mathf.Acos(CosWbaCWf);
+                        float AngleWbaCWf = Mathf.Acos(CosWbaCWf) * Mathf.Rad2Deg;
+                        float _fbDistance = Vector3.Distance(wbPosition, wfPosition);
 
                         //余弦定理求解CWb长度
+                        float CWb;
+                        float b = -2.0f * CWf * CosWbaCWf;
+                        float a = 1f;
+                        float c = (float)CWf * (float)CWf - (float)_fbDistance * (float)_fbDistance;
+                        float Delta = Mathf.Sqrt(b * b - 4 * a * c);
+                        if (((-b + Delta) / 2 / a) > 0) CWb = ((-b + Delta) / 2 / a);
+                        else CWb = ((-b - Delta) / 2 / a);
 
+                        //计算三角形CBBdot的所有边
+                        float FB;
+                        float BBdot = ABa / (CWba / CWb);
+                        float BWb = BaWba / (CWba / CWb);
+                        float dH = Mathf.Abs(FWf - BWb);
+                        FB = Mathf.Sqrt(_fbDistance * _fbDistance - dH * dH);
 
+                        //重新计算Yaw值
+                        float SinFLA = (AF + BBdot) / FB;
+                        YawCal = Mathf.Acos(SinFLA) * Mathf.Rad2Deg;
 
+                        temp = AngleWbaCWf;//AF;// CA;// CWfdot;// nearFWfdot;// CWfdotScaleCWf;// CA;// CWfdot / CWfdotScaleCWf;// 
+                        actualValue = Vector3.Distance(_fp, wfPosition);// _camera.transform.position); // zNear;// FdotAdot;// 
 
-
-
-
-
+                        yaw = YawCal - 90f;
                         cAngle = Mathf.Abs(yaw);
                         _sinC = Mathf.Sin(Mathf.Deg2Rad * cAngle);
                         _cosC = Mathf.Cos(Mathf.Deg2Rad * cAngle);
