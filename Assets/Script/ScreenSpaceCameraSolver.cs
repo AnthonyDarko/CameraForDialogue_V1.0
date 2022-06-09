@@ -30,6 +30,12 @@ namespace Pangu.Tools
             Type_3
         }
 
+        public enum Direction
+        {
+            right = 1,
+            left = -1
+        }
+
         [SerializeField] private Camera _camera;
         [Space(20)]
         public ViewportTarget front;
@@ -46,14 +52,15 @@ namespace Pangu.Tools
         public float dutch = 0;
 
         public CamClass CamType;
+        public Direction Dir;
 
         private float x_Test;// = _camera.transform.up.y;
         private float y_Test;
         private float z_Test;
 
-        [SerializeField] private float x_Right;// = _camera.transform.up.y;
-        [SerializeField] private float y_Right;
-        [SerializeField] private float z_Right;
+        /*[SerializeField] */private float x_Right;// = _camera.transform.up.y;
+        /*[SerializeField] */private float y_Right;
+        /*[SerializeField] */private float z_Right;
 
         private float Var1;// = _camera.transform.up.y;
         private float Var2;
@@ -87,15 +94,16 @@ namespace Pangu.Tools
         private double fb;
 
         public float CWf;
-        public float CWfDis;
+        [SerializeField] private float CWfDis;
         private double tanFCA;
         private double tanBCA;
         private float FCA;
         private float BCA;
 
-        [SerializeField] private float YawCal;
-        public float temp;
-        public float actualValue;
+        //DebugVar
+        private float YawCal;
+        private float temp;
+        private float actualValue;
 
         private void Update()
         {
@@ -336,12 +344,12 @@ namespace Pangu.Tools
 
                         //重新计算Yaw值
                         float SinFLA = (AF + BBdot) / FB;
-                        YawCal = Mathf.Acos(SinFLA) * Mathf.Rad2Deg;
+                        YawCal = Mathf.Asin(SinFLA) * Mathf.Rad2Deg;
 
-                        temp = AngleWbaCWf;//AF;// CA;// CWfdot;// nearFWfdot;// CWfdotScaleCWf;// CA;// CWfdot / CWfdotScaleCWf;// 
+                        temp = YawCal;//AF;// CA;// CWfdot;// nearFWfdot;// CWfdotScaleCWf;// CA;// CWfdot / CWfdotScaleCWf;// 
                         actualValue = Vector3.Distance(_fp, wfPosition);// _camera.transform.position); // zNear;// FdotAdot;// 
 
-                        yaw = YawCal - 90f;
+                        yaw = YawCal * (float)Dir;// - 90f;
                         cAngle = Mathf.Abs(yaw);
                         _sinC = Mathf.Sin(Mathf.Deg2Rad * cAngle);
                         _cosC = Mathf.Cos(Mathf.Deg2Rad * cAngle);
