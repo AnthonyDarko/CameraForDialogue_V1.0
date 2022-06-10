@@ -8,7 +8,7 @@ using UnityEngine;
 using System;
 using System.Threading;
 
-namespace Pangu.Tools
+namespace Samuel.Tools
 {
     [System.Serializable, ExecuteInEditMode]
     public partial class ScreenSpaceCameraSolver : MonoBehaviour
@@ -270,15 +270,16 @@ namespace Pangu.Tools
                     break;
                 case CamClass.Type_2:
                     {
-                        //根据CF值重新计算Yaw值
-                        CWfDis = (_camera.transform.position - wfPosition).magnitude;
-
                         #region Constant
                         float cAngle;
                         _aspect = _camera.aspect;
                         _tanHalfVerticalFov = Mathf.Tan(Mathf.Deg2Rad * fov / 2);
                         _tanHalfHorizonFov = _tanHalfVerticalFov * _aspect;
                         #endregion
+
+                        #region RecalculateYaw
+                        //根据CF值重新计算Yaw值
+                        CWfDis = (_camera.transform.position - wfPosition).magnitude;
 
                         //利用fov和aspect求出tanFCA的值，再得出FCA的度数
                         tanFCA = (fCompX) * _tanHalfVerticalFov * _aspect;
@@ -345,14 +346,14 @@ namespace Pangu.Tools
                         //重新计算Yaw值
                         float SinFLA = (AF + BBdot) / FB;
                         YawCal = Mathf.Asin(SinFLA) * Mathf.Rad2Deg;
-
-                        temp = YawCal;//AF;// CA;// CWfdot;// nearFWfdot;// CWfdotScaleCWf;// CA;// CWfdot / CWfdotScaleCWf;// 
-                        actualValue = Vector3.Distance(_fp, wfPosition);// _camera.transform.position); // zNear;// FdotAdot;// 
-
-                        yaw = YawCal * (float)Dir;// - 90f;
+                        yaw = YawCal * (float)Dir;
                         cAngle = Mathf.Abs(yaw);
                         _sinC = Mathf.Sin(Mathf.Deg2Rad * cAngle);
                         _cosC = Mathf.Cos(Mathf.Deg2Rad * cAngle);
+
+                        temp = YawCal;//AF;// CA;// CWfdot;// nearFWfdot;// CWfdotScaleCWf;// CA;// CWfdot / CWfdotScaleCWf;// 
+                        actualValue = Vector3.Distance(_fp, wfPosition);// _camera.transform.position); // zNear;// FdotAdot;// 
+                        #endregion
 
                         #region Solve
                         //c-相机，wb-背景目标，wf-前景目标，l相机中心线和fb的交点
@@ -381,8 +382,8 @@ namespace Pangu.Tools
                         var fS = fl * _sinC / fCompX / _aspect * 2; // F点到下边界垂线 * 2
                         var fY = fS * fCompY;
                         var bY = bS * bCompY;
-
                         #endregion
+
                         #region CalUp
                         //【解决思路】
                         //这里有一个基本的观察，因为相机没有roll角度，只围绕pitch和yaw发生了旋转，所以相机的竖屏面一定是与XZ形成的平面是垂直的

@@ -3,7 +3,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Pangu.Tools
+namespace Samuel.Tools
 {
     public partial class ScreenSpaceCameraSolver
     {
@@ -24,7 +24,7 @@ namespace Pangu.Tools
             DrawTarget();
             DrawResultPoint(_camera, wbPosition, Color.red, out var bvp);
             DrawResultPoint(_camera, wfPosition, Color.green, out var fvp);
-            //DrawLine(bvp, fvp);
+            DrawLine(bvp, fvp);
             DebugInfo();
 
             //辅助线
@@ -46,7 +46,7 @@ namespace Pangu.Tools
             Handles.Label(wbPosition + VecWbN, "N");
             Handles.DrawLine(wbPosition + VecBF, wbPosition + VecBF + Vector3.down * 1f);
             Handles.DrawLine(wbPosition + VecWbN, wbPosition + VecWbN + new Vector3(_camera.transform.forward.x, 0, _camera.transform.forward.z) * 0.5f);
-            Handles.DrawLine( new Vector3(_camera.transform.position.x, 0, _camera.transform.position.z), new Vector3(_camera.transform.position.x, 0, _camera.transform.position.z) + new Vector3(_camera.transform.forward.x, 0, _camera.transform.forward.z) * 0.5f);
+            //这条线有问题 Handles.DrawLine( new Vector3(_camera.transform.position.x, 0, _camera.transform.position.z), new Vector3(_camera.transform.position.x, 0, _camera.transform.position.z) + new Vector3(_camera.transform.forward.x, 0, _camera.transform.forward.z) * 0.5f); 
             Handles.Label(wbPosition + VecWBK, "K");
             //Handles.DrawLine(wbPosition, _camera.transform.position - wbPosition);
             Handles.DrawLine(_fp, _fp + (_camera.transform.position - _fp));
@@ -71,7 +71,7 @@ namespace Pangu.Tools
             var ppp = posCenter + Vector3.ProjectOnPlane(position - posCenter, camera.transform.up);
             DrawLine(posCenter, cp);
             DrawLine(posCenter, ppp);
-            //Handles.DrawLine(posCenter, posCenter + (wfPosition - _fp) * 11 );
+            Handles.DrawLine(posCenter, posCenter + (wfPosition - _fp) );
             DrawLine(position, ppp);
             #endregion
             SetColor(Color.white);
@@ -90,7 +90,7 @@ namespace Pangu.Tools
 
         private void DrawTarget()
         {
-            //DrawLine(wfPosition, wbPosition);
+            DrawLine(wfPosition, wbPosition);
             DrawLine(_bp, _fp);
             var size = 80f;
             var sv = SceneView.currentDrawingSceneView;
