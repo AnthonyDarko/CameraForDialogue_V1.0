@@ -380,11 +380,13 @@ MonoBehaviour:
   front: {fileID: 1036054683}
   back: {fileID: 771008734}
   _camera: {fileID: 2044605315}
-  frontCompositionX: 0
-  frontCompositionY: 0
-  backCompositionX: 0
-  backCompositionY: 0
-  CWfDistance: 0
+  frontCompositionX: 0.69099945
+  frontCompositionY: -0.27799904
+  backCompositionX: 0.22699946
+  backCompositionY: -0.082000144
+  Test1: {x: -0.026107091, y: 0.9996336, z: 0.0071433675}
+  Test2: {x: -0.026107095, y: 0.9996336, z: 0.007143354}
+  Dir: -1
 --- !u!1 &771008730
 GameObject:
   m_ObjectHideFlags: 0
@@ -849,8 +851,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044605313}
-  m_LocalRotation: {x: 0.009721463, y: -0.6829005, z: 0.009089377, w: 0.7303902}
-  m_LocalPosition: {x: -0.2491095, y: 2.656522, z: 4.686557}
+  m_LocalRotation: {x: 0.010759443, y: -0.6066089, z: 0.0082109645, w: 0.79488516}
+  m_LocalPosition: {x: 0.8219905, y: 2.803674, z: 3.2083201}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -871,16 +873,16 @@ MonoBehaviour:
   _camera: {fileID: 2044605315}
   front:
     target: {fileID: 1036054683}
-    compositionX: 0.462
-    compositionY: -0.5
+    compositionX: 0.691
+    compositionY: -0.278
   back:
     target: {fileID: 771008734}
     compositionX: 0.227
-    compositionY: -0.077
-  yaw: -14.677068
+    compositionY: -0.082
+  yaw: -26.133886
   fov: 49.8
   dutch: 0
   CamType: 1
   Dir: -1
-  CWf: 1.53
-  CWfDis: 1.5300018
+  CWf: 3.18
+  CWfDis: 3.1800017

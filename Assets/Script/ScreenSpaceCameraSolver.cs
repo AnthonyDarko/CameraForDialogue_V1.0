@@ -52,7 +52,7 @@ namespace Samuel.Tools
         public float dutch = 0;
 
         public CamClass CamType;
-        public Direction Dir;
+        public float Dir;
 
         private float x_Test;// = _camera.transform.up.y;
         private float y_Test;
