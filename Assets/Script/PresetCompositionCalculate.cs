@@ -23,7 +23,7 @@ public class PresetCompositionCalculate : MonoBehaviour
     [SerializeField] private float backCompositionX;
     [SerializeField] private float backCompositionY;
 
-    /*[SerializeField] */private float CWfDistance;
+    [SerializeField] private float CWfDistance;
     /*[SerializeField] */private Vector3 CWfVector;
     /*[SerializeField] */private float CWbDistance;
     /*[SerializeField] */private Vector3 CWbVector;
