@@ -358,8 +358,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 478144419}
-  m_LocalRotation: {x: 0.20418464, y: -0.34943646, z: 0.07839454, w: 0.9110747}
-  m_LocalPosition: {x: -0.32966617, y: 3.8222485, z: 2.0972233}
+  m_LocalRotation: {x: 0.1730465, y: -0.21979035, z: 0.039750557, w: 0.95925343}
+  m_LocalPosition: {x: -1.3194504, y: 3.0713487, z: 2.551281}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -380,13 +380,13 @@ MonoBehaviour:
   front: {fileID: 1036054683}
   back: {fileID: 771008734}
   _camera: {fileID: 478144421}
-  frontCompositionX: 0.31369385
-  frontCompositionY: -0.07837857
-  backCompositionX: 0.24907048
-  backCompositionY: 0.13091467
-  CWfDistance: 3.7800806
-  Test1: {x: -0.28554556, y: 0.90432584, z: 0.31726715}
-  Test2: {x: -0.28554568, y: 0.90432584, z: 0.3172671}
+  frontCompositionX: 0.4209558
+  frontCompositionY: -0.046319082
+  backCompositionX: 0.65628266
+  backCompositionY: 0.10976045
+  CWfDistance: 2.847208
+  Test1: {x: -0.15232964, y: 0.9369496, z: 0.3145173}
+  Test2: {x: -0.15232962, y: 0.9369496, z: 0.31451732}
   Dir: -1
 --- !u!1 &771008730
 GameObject:
@@ -787,6 +787,7 @@ GameObject:
   - component: {fileID: 2044605315}
   - component: {fileID: 2044605314}
   - component: {fileID: 2044605317}
+  - component: {fileID: 2044605318}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -852,8 +853,8 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2044605313}
-  m_LocalRotation: {x: 0.099250436, y: -0.3799317, z: 0.041042767, w: 0.91875833}
-  m_LocalPosition: {x: -1.1190498, y: 2.2844868, z: 4.3256407}
+  m_LocalRotation: {x: 0.09478994, y: -0.43008527, z: 0.045466945, w: 0.89664614}
+  m_LocalPosition: {x: -0.9815999, y: 2.2848587, z: 4.409247}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -880,10 +881,33 @@ MonoBehaviour:
     target: {fileID: 771008734}
     compositionX: 0.5609768
     compositionY: 0.1261491
-  yaw: -40.659748
+  yaw: -34.276035
   fov: 60
   dutch: 0
   CamType: 1
   Dir: -1
   CWf: 1
-  CWfDis: 0.9940127
+  CWfDis: 0.99348634
+--- !u!114 &2044605318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2044605313}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e5d61de3a1c01bf418a0aad1f4165c9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  front: {fileID: 771008734}
+  back: {fileID: 1036054683}
+  _camera: {fileID: 478144421}
+  frontCompositionX: 0.65628266
+  frontCompositionY: 0.10976045
+  backCompositionX: 0.4209558
+  backCompositionY: -0.046319082
+  CWfDistance: 5.329478
+  Test1: {x: 0.15232962, y: -0.93694955, z: -0.3145173}
+  Test2: {x: -0.15232962, y: 0.9369496, z: 0.31451732}
+  Dir: 1
