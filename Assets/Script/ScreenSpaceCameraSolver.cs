@@ -76,7 +76,7 @@ namespace Samuel.Tools
         public Vector3 wfPosition => front.target.position;
         private Transform _calcTarget => _camera.transform;
 
-        private double _aspect;//屏幕长宽比
+        [SerializeField] private double _aspect;//屏幕长宽比
         private double _overSacle;//wb所在相机深度和wf所在相机深度的投影面大小比
         private Vector3 _lookCenter;
         private Vector3 _bp;//wb在相机水平面的投影点
@@ -470,7 +470,7 @@ namespace Samuel.Tools
 
                         #region Apply
                         _calcTarget.transform.position = _lookCenter -
-                            (float)(cl) * cameraFwd;
+                            (float)(cl) * camFwd;
                         _calcTarget.transform.LookAt(_lookCenter, Quaternion.Euler(0, 0, dutch) * Vector3.up);
                         _camera.fieldOfView = fov;
                         #endregion
